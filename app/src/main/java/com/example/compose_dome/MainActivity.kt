@@ -1,46 +1,32 @@
 package com.example.compose_dome
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.compose_dome.skin.color
+import com.example.compose_dome.skin.colorPainter
+import com.example.compose_dome.ui.page.Home
+import com.example.compose_dome.ui.page.User
 import com.example.compose_dome.ui.theme.ComposeDomeTheme
-
-lateinit var resourceProvider: MutableState<ResourceProvider>
-
-class ResourceProvider(private val res: Resources, isNight: Boolean) {
-    init {
-        res.applyNight(isNight)
-    }
-
-    fun getColorById(id: Int): androidx.compose.ui.graphics.Color {
-        return Color(res.getColor(id))
-    }
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            resourceProvider = remember {
-                mutableStateOf(ResourceProvider(resources, false))
-            }
+            // 初始化
             val controller = rememberNavController()
             ComposeDomeTheme {
                 // A surface container using the 'background' color from the theme
@@ -48,41 +34,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
                 ) {
+                    // navigation 路由
                     NavHost(navController = controller, startDestination = "Home", builder = {
                         this.composable("Home") {
-                            Column {
-                                Text(
-                                    text = "Home Page goto UserPage||",
-                                    color = resourceProvider.value.getColorById(R.color.test_color),
-                                    modifier = Modifier.clickable {
-                                        controller.navigate("User")
-                                    }
-                                )
-                                Text(
-                                    text = "makeDay||",
-                                    modifier = Modifier.clickable {
-                                        resourceProvider.value = ResourceProvider(resources, false)
-                                    },
-                                )
-                                Text(
-                                    text = "makeNight",
-                                    modifier = Modifier.clickable {
-                                        resourceProvider.value = ResourceProvider(resources, true)
-                                    },
-                                )
-                            }
-
+                            Home(controller = controller)
                         }
                         this.composable("User") {
-                            Text(
-                                text = "User Page goto Home Page",
-                                color = resourceProvider.value.getColorById(R.color.test_color),
-                                modifier = Modifier.clickable {
-                                    controller.popBackStack()
-                                }
-                            )
+                            User(controller = controller)
                         }
-                    })
+                    }, modifier = Modifier.background(R.color.app_background.color()))
                 }
             }
         }

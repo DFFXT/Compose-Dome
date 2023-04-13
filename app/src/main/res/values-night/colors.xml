@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="test_color">#00ff00</color>
+    <color name="app_background">#666</color>
+    <color name="test_color">#fff</color>
+    <color name="btn_selected">#fff</color>
+    <color name="btn_unselected">#66ffffff</color>
+    <color name="user_icon_tint_1">#ffffffff</color>
+    <color name="user_icon_tint_2">#aaffffff</color>
+    <color name="user_icon_tint_3">#66ffffff</color>
 </resources>

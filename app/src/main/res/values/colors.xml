@@ -7,5 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="test_color">#ff0000</color>
+    <color name="app_background">#fff</color>
+    <color name="test_color">#000</color>
+    <color name="btn_selected">#000</color>
+    <color name="btn_unselected">#22000000</color>
+    <color name="user_icon_tint_1">#ff000000</color>
+    <color name="user_icon_tint_2">#aa000000</color>
+    <color name="user_icon_tint_3">#66000000</color>
 </resources>
