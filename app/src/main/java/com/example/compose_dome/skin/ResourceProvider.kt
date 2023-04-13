@@ -1,17 +1,23 @@
 package com.example.compose_dome.skin
 
+import android.graphics.drawable.StateListDrawable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import com.example.compose_dome.App
 import com.example.compose_dome.applyNight
 
 /**
@@ -98,6 +104,10 @@ fun @receiver:ColorRes Int.stateColor(
     selected: Boolean = false,
     enable: Boolean = false,
 ): Color {
+    return provider.getColorById(id = this, state = getState(selected, enable))
+}
+
+fun getState(selected: Boolean, enable: Boolean): IntArray {
     val state = mutableListOf<Int>()
     if (selected) {
         state.add(android.R.attr.state_selected)
@@ -105,5 +115,24 @@ fun @receiver:ColorRes Int.stateColor(
     if (enable) {
         state.add(android.R.attr.state_enabled)
     }
-    return provider.getColorById(id = this, state = state.toIntArray())
+    return state.toIntArray()
+}
+
+/**
+ * 使用原生drawable对象
+ * Compose现在已经不支持设置drawable了 [painterResource] 可知只支持矢量图和bitmap
+ * 而且需要传递状态啥的，有点麻烦，除非将状态也进行封装(未尝试)
+ */
+fun Modifier.drawable(id: Int, selected: Boolean = false, enable: Boolean = false): Modifier {
+    return drawBehind {
+        val drawable = App.application.getDrawable(id)!!
+        val s = size
+        drawable.setBounds(0, 0, s.width.toInt(), s.height.toInt())
+        if (drawable is StateListDrawable) {
+            drawable.state = getState(selected, enable)
+        }
+        drawIntoCanvas {
+            drawable.draw(it.nativeCanvas)
+        }
+    }
 }

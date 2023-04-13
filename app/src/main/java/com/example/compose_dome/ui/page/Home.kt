@@ -5,24 +5,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.compose_dome.R
-import com.example.compose_dome.skin.GlobalResourcesProvider
-import com.example.compose_dome.skin.color
-import com.example.compose_dome.skin.isNight
-import com.example.compose_dome.skin.stateColor
+import com.example.compose_dome.skin.*
 
 @Composable
 fun Home(controller: NavHostController) {
+    val selected = remember {
+        mutableStateOf(true)
+    }
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            // 此处模拟使用带状态的drawable
+            .drawable(R.drawable.bg_app, selected = selected.value)
+            .clickable {
+                selected.value = !selected.value
+            }
             .padding(top = 100.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "Home Page",
