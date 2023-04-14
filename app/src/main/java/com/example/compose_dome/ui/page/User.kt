@@ -37,7 +37,7 @@ fun User(controller: NavHostController) {
             Row(horizontalArrangement = Arrangement.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painter = R.mipmap.icon_user_main_default.bitmapPainter(),
+                        painter = R.mipmap.icon_user.bitmapPainter(),
                         contentDescription = "",
                         // 添加colorFilter使颜色更明显
                         // colorFilter = ColorFilter.tint(R.color.user_icon_tint.color()),

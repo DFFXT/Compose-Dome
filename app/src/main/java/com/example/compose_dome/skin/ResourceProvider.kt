@@ -1,5 +1,6 @@
 package com.example.compose_dome.skin
 
+import android.content.res.Resources
 import android.graphics.drawable.StateListDrawable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -27,14 +28,20 @@ var GlobalResourcesProvider by mutableStateOf(ResourceProvider(false))
 
 /**
  * 资源提供器
+ * @param resources 如果为null则全局替换
  */
-class ResourceProvider(val isNight: Boolean) {
+class ResourceProvider(val isNight: Boolean, private val resources: Resources? = null) {
     init {
         // 更新底层Resource对象的uiMode
         // 这里采用全局更改的方式，具体看需求实现
-        ContextCollector.allContext.map { it.get() }.filterNotNull().forEach {
-            it.resources.applyNight(isNight)
+        if (resources == null) {
+            ContextCollector.allContext.map { it.get() }.filterNotNull().forEach {
+                it.resources.applyNight(isNight)
+            }
+        } else {
+            resources.applyNight(isNight)
         }
+
     }
 
     /**
@@ -42,7 +49,7 @@ class ResourceProvider(val isNight: Boolean) {
      */
     fun switchTheme(isNight: Boolean) {
         // 重新new一个对象，触发更新操作
-        GlobalResourcesProvider = ResourceProvider(isNight)
+        GlobalResourcesProvider = ResourceProvider(isNight, resources)
     }
 
     @Composable

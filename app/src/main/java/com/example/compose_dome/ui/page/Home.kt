@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -18,25 +17,24 @@ import com.example.compose_dome.skin.*
 
 @Composable
 fun Home(controller: NavHostController) {
-    val selected = remember {
-        mutableStateOf(true)
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // 此处模拟使用带状态的drawable
-            .drawable(R.drawable.bg_app, selected = selected.value)
-            .clickable {
-                selected.value = !selected.value
-            }
             .padding(top = 100.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val selected = remember {
+            mutableStateOf(true)
+        }
         Text(
             text = "Home Page",
             fontSize = 40.sp,
             // 设置文本颜色
             color = R.color.test_color.color(),
+            // 此处模拟使用带状态的drawable
+            modifier = Modifier.drawable(R.drawable.bg_app, selected = selected.value).clickable {
+                selected.value = !selected.value
+            },
         )
         Spacer(modifier = Modifier.height(100.dp))
         Row {
